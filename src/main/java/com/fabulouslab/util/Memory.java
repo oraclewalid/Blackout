@@ -7,7 +7,7 @@ public class Memory {
 
     public static void  copyMemory(long oldValueAddress, long newValueAddress, long lenght){
         try {
-            getUnsafe().copyMemory();copyMemory(oldValueAddress, newValueAddress, lenght);
+            getUnsafe().copyMemory(oldValueAddress, newValueAddress, lenght);
         } catch (IllegalAccessException | NoSuchFieldException e) {
             throw  new RuntimeException(e);
         }

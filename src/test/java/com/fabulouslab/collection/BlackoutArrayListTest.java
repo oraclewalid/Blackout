@@ -33,12 +33,6 @@ public class BlackoutArrayListTest {
         blackoutArrayList.get(1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void should_get_exception_for_size_0() throws Exception {
-
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(-1);
-    }
-
     @Test
     public void should_remove_a_value_by_index() throws Exception {
 

@@ -84,8 +84,8 @@ public class BlackoutIntegerArray implements List<Integer>{
         long oldValueAddress = address + index * INTEGER_LENGHT;
         long nextValueAddress = address + (index + 1) * INTEGER_LENGHT;
         long lenght = (capacity - index - 1) * INTEGER_LENGHT;
-        
-        Memory.copyMemory(oldValueAddress, nextValueAddress, lenght);
+
+        Memory.copyMemory(nextValueAddress, oldValueAddress, lenght);
         size = --size;
         return oldValue;
     }
