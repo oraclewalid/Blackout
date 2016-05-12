@@ -86,18 +86,35 @@ public class BlackoutIntegerArray implements List<Integer>{
         long lenght = (capacity - index - 1) * INTEGER_LENGHT;
 
         Memory.copyMemory(nextValueAddress, oldValueAddress, lenght);
-        size = --size;
+        size--;
         return oldValue;
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        Objects.requireNonNull(o);
+        //TODO replace get(i) by a loop on sublist(0,size)
+        for(int i = 0; i < size; i++){
+            if(o.equals(get(i)))
+                return i;
+        }
+        return -1;
     }
 
     @Override
     public Iterator<Integer> iterator() {
-        return null;
+        return new Iterator<Integer>() {
+            int counter = -1;
+            @Override
+            public boolean hasNext() {
+                return counter + 1 < size;
+            }
+
+            @Override
+            public Integer next() {
+                return get(++counter);
+            }
+        };
     }
 
     @Override

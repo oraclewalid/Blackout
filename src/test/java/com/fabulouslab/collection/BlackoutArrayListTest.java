@@ -45,4 +45,38 @@ public class BlackoutArrayListTest {
         assertThat(blackoutArrayList.get(1)).isEqualTo(10);
     }
 
+    @Test
+    public void should_last_element_by_index() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{1,7,10});
+        Integer removedValue = blackoutArrayList.remove(2);
+
+        assertThat(blackoutArrayList.size()).isEqualTo(2);
+        assertThat(removedValue).isEqualTo(10);
+        assertThat(blackoutArrayList.get(0)).isEqualTo(1);
+        assertThat(blackoutArrayList.get(1)).isEqualTo(7);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void should_get_first_index_of_a_number() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{1,7,10});
+
+        assertThat(blackoutArrayList.indexOf(1)).isEqualTo(0);
+        assertThat(blackoutArrayList.indexOf(7)).isEqualTo(1);
+        assertThat(blackoutArrayList.indexOf(10)).isEqualTo(2);
+        assertThat(blackoutArrayList.indexOf(-1)).isEqualTo(-1);
+        assertThat(blackoutArrayList.indexOf(null)).isEqualTo(null);
+    }
+
+    @Test
+    public void should_get_a_iterrator() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2,3});
+
+        for (Integer i : blackoutArrayList){
+           assertThat(i).isEqualTo(blackoutArrayList.get(i));
+        }
+    }
+
 }
