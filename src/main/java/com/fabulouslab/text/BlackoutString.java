@@ -25,8 +25,8 @@ public class BlackoutString implements CharSequence {
         try {
             address = getUnsafe().allocateMemory(length * CHAR_LENGHT);
             for (int i = 0; i < length; i++) {
-                long memoryAddress = address + i * CHAR_LENGHT;
-                getUnsafe().putChar(memoryAddress ,inHeapStringAsChar[i] );
+                long charMemoryAddress = address + i * CHAR_LENGHT;
+                getUnsafe().putChar(charMemoryAddress ,inHeapStringAsChar[i] );
             }
         } catch (IllegalAccessException | NoSuchFieldException e) {
             throw  new RuntimeException(e);
@@ -41,8 +41,8 @@ public class BlackoutString implements CharSequence {
     @Override
     public char charAt(int index) {
         try {
-            long memoryAddress = address + index * CHAR_LENGHT;
-            return getUnsafe().getChar(memoryAddress);
+            long charMemoryAddress = address + index * CHAR_LENGHT;
+            return getUnsafe().getChar(charMemoryAddress);
         } catch (IllegalAccessException | NoSuchFieldException e) {
             throw  new RuntimeException(e);
         }
