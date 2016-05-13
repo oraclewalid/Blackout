@@ -124,7 +124,13 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        Integer[] integers = new Integer[size];
+
+        for (int i = 0; i < size ; i++) {
+            integers[i] = get(i);
+        }
+
+        return integers;
     }
 
     @Override
@@ -134,6 +140,12 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public boolean remove(Object o) {
+        Objects.requireNonNull(o);
+        int index = indexOf(o);
+        if (index != -1){
+            remove(index);
+            return true;
+        }
         return false;
     }
 

@@ -79,4 +79,57 @@ public class BlackoutArrayListTest {
         }
     }
 
+    @Test
+    public void should_get_a_array_in_heap_of_off_heap_array() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,0,3});
+        Object[] onHeapArray = blackoutArrayList.toArray();
+
+        assertThat(onHeapArray.length).isEqualTo(4);
+        assertThat(onHeapArray[0]).isEqualTo(blackoutArrayList.get(0));
+        assertThat(onHeapArray[1]).isEqualTo(blackoutArrayList.get(1));
+        assertThat(onHeapArray[2]).isEqualTo(blackoutArrayList.get(2));
+        assertThat(onHeapArray[3]).isEqualTo(blackoutArrayList.get(3));
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void should_get_a_empty_array_in_heap_of_emplty_off_heap_array() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{});
+        Object[] onHeapArray = blackoutArrayList.toArray();
+
+        assertThat(onHeapArray.length).isEqualTo(0);
+        assertThat(onHeapArray[0]).isEqualTo(blackoutArrayList.get(0));
+    }
+
+    @Test
+    public void should_remove_object() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,0,3});
+        boolean remove = blackoutArrayList.remove(new Integer(10));
+
+        assertThat(remove).isTrue();
+        assertThat(blackoutArrayList.size()).isEqualTo(3);
+        assertThat(blackoutArrayList.get(0)).isEqualTo(-1);
+        assertThat(blackoutArrayList.get(1)).isEqualTo(0);
+        assertThat(blackoutArrayList.get(2)).isEqualTo(3);
+    }
+
+    @Test
+    public void should_not_remove_a_not_found_object() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,0,3});
+        boolean remove = blackoutArrayList.remove(new Integer(2));
+
+        assertThat(remove).isFalse();
+        assertThat(blackoutArrayList.size()).isEqualTo(4);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void should_throw_exception_if_object_is_null() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,0,3});
+        boolean remove = blackoutArrayList.remove(null);
+    }
+
 }
