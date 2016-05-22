@@ -118,7 +118,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_not_remove_a_not_found_object() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,0,3});
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10, -1, 0, 3});
         boolean remove = blackoutArrayList.remove(new Integer(2));
 
         assertThat(remove).isFalse();
@@ -130,6 +130,26 @@ public class BlackoutArrayListTest {
 
         BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,0,3});
         boolean remove = blackoutArrayList.remove(null);
+    }
+
+    @Test
+    public void should_set_new_value() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,0,3});
+        int  oldValue = blackoutArrayList.set(2,2);
+
+        assertThat(oldValue).isEqualTo(0);
+        assertThat(blackoutArrayList.get(2)).isEqualTo(2);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void should_clear_list() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,0,3});
+        blackoutArrayList.clear();
+
+        assertThat(blackoutArrayList.size()).isEqualTo(0);
+        assertThat(blackoutArrayList.get(0)).isEqualTo(2);
     }
 
 }

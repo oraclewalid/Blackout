@@ -29,25 +29,17 @@ public class BlackoutIntegerArray implements List<Integer>{
             throw new IllegalArgumentException("Size must be higher than 0");
         this.size = 0;
         this.capacity = capacity;
+        address = Memory.allocate(this.capacity * INTEGER_LENGHT);
     }
 
     public BlackoutIntegerArray(int[] values) {
         this.size = values.length;
         this.capacity = values.length;
-        allocateOfHeap(values);
-    }
+        address = Memory.allocate(this.capacity * INTEGER_LENGHT);
 
-    private long allocateOfHeap(int[] values)  {
-
-        try {
-            address = getUnsafe().allocateMemory(size * INTEGER_LENGHT);
-            for (int i = 0; i < size; i++) {
-                long memoryAddress = address + i * INTEGER_LENGHT;
-                getUnsafe().putInt(memoryAddress ,values[i]);
-            }
-            return address;
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            throw  new RuntimeException(e);
+        for (int i = 0; i < values.length; i++) {
+            long addr = address + i * INTEGER_LENGHT;
+            Memory.putInt(addr, values[i]);
         }
     }
 
@@ -68,21 +60,17 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public Integer get(int index) {
-        try {
-            checkBounds(index);
-            long integerMemoryAddress = address + index * INTEGER_LENGHT;
-            return getUnsafe().getInt(integerMemoryAddress);
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            throw  new RuntimeException(e);
-        }
+        checkBounds(index);
+        long addr = address + index * INTEGER_LENGHT;
+        return Memory.getInt(addr);
     }
 
     @Override
     public Integer remove(int index) {
 
         int oldValue = get(index);
-        long oldValueAddress = address + index * INTEGER_LENGHT;
-        long nextValueAddress = address + (index + 1) * INTEGER_LENGHT;
+        long oldValueAddress = Memory.computeAddr(address, index, INTEGER_LENGHT);
+        long nextValueAddress = Memory.computeAddr(address, index+1, INTEGER_LENGHT);;
         long lenght = (capacity - index - 1) * INTEGER_LENGHT;
 
         Memory.copyMemory(nextValueAddress, oldValueAddress, lenght);
@@ -181,6 +169,9 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public void clear() {
+        Memory.free(address);
+        size = 0;
+        address = Memory.allocate(this.capacity * INTEGER_LENGHT);
 
     }
 
@@ -226,7 +217,10 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public Integer set(int index, Integer element) {
-        return null;
+        Integer oldValue = get(index);
+        long addr = Memory.computeAddr(address, index, INTEGER_LENGHT);
+        Memory.putInt(addr,element);
+        return oldValue;
     }
 
     @Override
