@@ -1,13 +1,7 @@
 package com.fabulouslab.collection;
 
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Objects;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -154,6 +148,22 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public boolean removeAll(Collection<?> c) {
+        int[] elementData = new int[size];
+        int newIndex = 0;
+        for (int i = 0; i < size ; i++) {
+            if (!c.contains(get(i))) {
+                elementData[newIndex++] = get(i);
+            }
+        }
+        if (newIndex != size) {
+            elementData = Arrays.copyOf(elementData, newIndex);
+            BlackoutIntegerArray newArray = new BlackoutIntegerArray(elementData);
+            size = newArray.size;
+            address = newArray.address;
+            capacity = newArray.capacity;
+            return true;
+        }
+
         return false;
     }
 
@@ -187,7 +197,13 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        Objects.requireNonNull(o);
+        for (int i = size - 1; i >= 0; i--) {
+            if (o.equals(get(i))) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override

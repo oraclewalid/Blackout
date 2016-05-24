@@ -2,6 +2,8 @@ package com.fabulouslab.collection;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.assertj.core.api.Assertions.*;
 
 public class BlackoutArrayListTest {
@@ -152,4 +154,41 @@ public class BlackoutArrayListTest {
         assertThat(blackoutArrayList.get(0)).isEqualTo(2);
     }
 
+    @Test
+    public void should_return_the_last_index_of_the_given_input() throws Exception {
+        BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{10, 2, 3, 10});
+
+        int lastIndex = blackoutIntegerArray.lastIndexOf(10);
+
+        assertThat(lastIndex).isEqualTo(3);
+    }
+
+    @Test
+    public void should_return_minus_one_if_the_given_input_is_not_in_the_list() throws Exception {
+        BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{10, 2, 3, 10});
+
+        int lastIndex = blackoutIntegerArray.lastIndexOf(1);
+
+        assertThat(lastIndex).isEqualTo(-1);
+    }
+
+    @Test
+    public void should_remove_all_given_element_from_the_list() throws Exception {
+        BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{1, 2, 3, 11});
+
+        boolean removed = blackoutIntegerArray.removeAll(Arrays.asList(2, 3));
+
+        assertThat(removed).isTrue();
+        assertThat(blackoutIntegerArray).hasSize(2);
+        assertThat(blackoutIntegerArray).containsExactly(1, 11);
+    }
+
+    @Test
+    public void should_return_false_if_given_element_are_not_in_list_when_removeAll_is_called() throws Exception {
+        BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{1, 2, 3, 11});
+
+        boolean removed = blackoutIntegerArray.removeAll(Arrays.asList(22, 20));
+
+        assertThat(removed).isFalse();
+    }
 }
