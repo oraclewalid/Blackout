@@ -2,6 +2,10 @@ package com.fabulouslab.collection;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 
 public class BlackoutArrayListTest {
@@ -150,6 +154,23 @@ public class BlackoutArrayListTest {
 
         assertThat(blackoutArrayList.size()).isEqualTo(0);
         assertThat(blackoutArrayList.get(0)).isEqualTo(2);
+    }
+
+    @Test
+    public void should_add_collection_with_index() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,1,3});
+        List<Integer> listToAdd = new ArrayList(){{
+            add(1);
+            add(2);
+        }};
+        blackoutArrayList.addAll(2, listToAdd);
+
+        assertThat(blackoutArrayList.size()).isEqualTo(6);
+        assertThat(blackoutArrayList.get(2)).isEqualTo(1);
+        assertThat(blackoutArrayList.get(3)).isEqualTo(2);
+        assertThat(blackoutArrayList.get(4)).isEqualTo(1);
+        assertThat(blackoutArrayList.get(5)).isEqualTo(3);
     }
 
 }

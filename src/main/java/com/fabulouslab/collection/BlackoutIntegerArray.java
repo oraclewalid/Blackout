@@ -182,7 +182,6 @@ public class BlackoutIntegerArray implements List<Integer>{
         Memory.free(address);
         size = 0;
         address = Memory.allocate(this.capacity * INTEGER_LENGHT);
-
     }
 
     @Override
@@ -221,11 +220,6 @@ public class BlackoutIntegerArray implements List<Integer>{
     }
 
     @Override
-    public void add(int index, Integer element) {
-
-    }
-
-    @Override
     public Integer set(int index, Integer element) {
         Integer oldValue = get(index);
         long addr = Memory.computeAddr(address, index, INTEGER_LENGHT);
@@ -235,6 +229,12 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public boolean addAll(int index, Collection<? extends Integer> c) {
+        checkCapacity(c.size(), index);
+        int i = 0;
+        for (int element : c) {
+            set(index + i, element);
+            i++;
+        }
         return false;
     }
 
@@ -244,12 +244,35 @@ public class BlackoutIntegerArray implements List<Integer>{
     }
 
     @Override
+    public void add(int index, Integer element) {
+
+    }
+
+    @Override
     public boolean add(Integer integer) {
+
         return false;
+    }
+
+    private void checkCapacity(int newSize, int index){
+        if(capacity <= size + newSize){
+            address = realocate(newSize, index);
+            size = size + newSize;
+        }
+    }
+    private long realocate(int newSize, int index){
+        long newAddr = Memory.allocate((this.size + newSize) * INTEGER_LENGHT);
+
+        //Copy first part
+        Memory.copyMemory(newAddr, address, index * INTEGER_LENGHT);
+
+        //Copy second part
+        Memory.copyMemory(newAddr + (index + newSize) * INTEGER_LENGHT, address + index * INTEGER_LENGHT, index * INTEGER_LENGHT);
+        return newAddr;
     }
 
     private void checkBounds(int index) {
         if (index >= size || index < 0)
-            throw new IndexOutOfBoundsException("index" + index + "is out of bound");
+            throw new IndexOutOfBoundsException("index " + index + "is out of bound");
     }
 }
