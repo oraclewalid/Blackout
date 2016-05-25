@@ -229,6 +229,7 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public boolean addAll(int index, Collection<? extends Integer> c) {
+        checkBounds(index);
         checkCapacity(c.size(), index);
         int i = 0;
         for (int element : c) {
@@ -245,6 +246,7 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public void add(int index, Integer element) {
+        checkBounds(index);
 
     }
 
@@ -254,20 +256,23 @@ public class BlackoutIntegerArray implements List<Integer>{
         return false;
     }
 
-    private void checkCapacity(int newSize, int index){
+    private void checkCapacity(int newSize, int padding){
         if(capacity <= size + newSize){
-            address = realocate(newSize, index);
+            address = realocate(newSize, padding);
             size = size + newSize;
         }
     }
-    private long realocate(int newSize, int index){
+
+    private long realocate(int newSize, int padding){
+
         long newAddr = Memory.allocate((this.size + newSize) * INTEGER_LENGHT);
+        //Copy first part before padding
+        Memory.copyMemory(address, newAddr, padding * INTEGER_LENGHT);
+        //Copy second part after padding
+        long oldAddrWithPadding = Memory.computeAddr(address, padding, INTEGER_LENGHT);
+        long newAddrWithPadding = Memory.computeAddr(newAddr, padding + newSize, INTEGER_LENGHT);
+        Memory.copyMemory(oldAddrWithPadding, newAddrWithPadding , (size - padding) * INTEGER_LENGHT);
 
-        //Copy first part
-        Memory.copyMemory(newAddr, address, index * INTEGER_LENGHT);
-
-        //Copy second part
-        Memory.copyMemory(newAddr + (index + newSize) * INTEGER_LENGHT, address + index * INTEGER_LENGHT, index * INTEGER_LENGHT);
         return newAddr;
     }
 
