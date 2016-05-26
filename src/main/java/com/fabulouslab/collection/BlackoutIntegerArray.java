@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
+import com.fabulouslab.exception.BlackoutException;
 import com.fabulouslab.util.Memory;
 
 public class BlackoutIntegerArray implements List<Integer>{
@@ -64,7 +65,7 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public Integer get(int index) {
-        checkBounds(index);
+        checkSizeBounds(index);
         long addr = address + index * INTEGER_LENGHT;
         return Memory.getInt(addr);
     }
@@ -229,24 +230,49 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public boolean addAll(int index, Collection<? extends Integer> c) {
-        checkBounds(index);
-        checkCapacity(c.size(), index);
-        int i = 0;
-        for (int element : c) {
-            set(index + i, element);
-            i++;
+
+        try {
+            checkSizeBounds(index);
+            if(!checkCapacity(c.size())){
+                address = realocate(c.size(), index);
+            }
+            int i = 0;
+            for (int element : c) {
+                long addr = Memory.computeAddr(address, index + i, INTEGER_LENGHT);
+                Memory.putInt(addr,element);
+                i++;
+            }
+            size = size + c.size();
+            return true;
         }
-        return false;
+        catch (BlackoutException ex){
+            return false;
+        }
     }
 
     @Override
     public boolean addAll(Collection<? extends Integer> c) {
-        return false;
+        try {
+            if(!checkCapacity(c.size())){
+                address = realocate(c.size(), 0);
+            }
+            int i = 0;
+            for (int element : c) {
+                long addr = Memory.computeAddr(address, size + i, INTEGER_LENGHT);
+                Memory.putInt(addr,element);
+                i++;
+            }
+            size = size + c.size();
+            return true;
+        }
+        catch (BlackoutException ex){
+            return false;
+        }
     }
 
     @Override
     public void add(int index, Integer element) {
-        checkBounds(index);
+        checkSizeBounds(index);
 
     }
 
@@ -256,11 +282,11 @@ public class BlackoutIntegerArray implements List<Integer>{
         return false;
     }
 
-    private void checkCapacity(int newSize, int padding){
+    private boolean checkCapacity(int newSize){
         if(capacity <= size + newSize){
-            address = realocate(newSize, padding);
-            size = size + newSize;
+            return false;
         }
+        return true;
     }
 
     private long realocate(int newSize, int padding){
@@ -276,7 +302,7 @@ public class BlackoutIntegerArray implements List<Integer>{
         return newAddr;
     }
 
-    private void checkBounds(int index) {
+    private void checkSizeBounds(int index) {
         if (index >= size || index < 0)
             throw new IndexOutOfBoundsException("index " + index + "is out of bound");
     }

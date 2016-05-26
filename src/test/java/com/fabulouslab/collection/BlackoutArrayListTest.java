@@ -175,4 +175,21 @@ public class BlackoutArrayListTest {
         assertThat(blackoutArrayList.get(6)).isEqualTo(-2);
     }
 
+    @Test
+    public void should_add_collection() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        List<Integer> listToAdd = new ArrayList(){{
+            add(1);
+            add(2);
+        }};
+        blackoutArrayList.addAll(listToAdd);
+
+        assertThat(blackoutArrayList.size()).isEqualTo(4);
+        assertThat(blackoutArrayList.get(0)).isEqualTo(10);
+        assertThat(blackoutArrayList.get(1)).isEqualTo(-1);
+        assertThat(blackoutArrayList.get(2)).isEqualTo(1);
+        assertThat(blackoutArrayList.get(3)).isEqualTo(2);
+    }
+
 }
