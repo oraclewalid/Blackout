@@ -31,11 +31,15 @@ public class BlackoutIntegerArray implements List<Integer>{
     }
 
     public BlackoutIntegerArray(int[] values) {
-        this.size = values.length;
-        this.capacity = values.length;
+        createOffHeapArray(values, values.length);
+    }
+
+    private void createOffHeapArray(int[] values, int length) {
+        this.size = length;
+        this.capacity = length;
         address = Memory.allocate(this.capacity * INTEGER_LENGHT);
 
-        for (int i = 0; i < values.length; i++) {
+        for (int i = 0; i < length; i++) {
             long addr = address + i * INTEGER_LENGHT;
             Memory.putInt(addr, values[i]);
         }
@@ -157,12 +161,7 @@ public class BlackoutIntegerArray implements List<Integer>{
         }
         if (newIndex != size) {
             long oldAddress = address;
-            elementData = Arrays.copyOf(elementData, newIndex);
-            BlackoutIntegerArray newArray = new BlackoutIntegerArray(elementData);
-            size = newArray.size;
-            address = newArray.address;
-            capacity = newArray.capacity;
-
+            createOffHeapArray(elementData, newIndex);
             Memory.free(oldAddress);
             return true;
         }
