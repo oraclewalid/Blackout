@@ -184,7 +184,7 @@ public class BlackoutArrayListTest {
     }
 
     @Test
-    public void should_return_false_if_given_element_are_not_in_list_when_removeAll_is_called() throws Exception {
+    public void should_return_false_when_given_element_are_not_in_list() throws Exception {
         BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{1, 2, 3, 11});
 
         boolean removed = blackoutIntegerArray.removeAll(Arrays.asList(22, 20));
