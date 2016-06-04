@@ -164,6 +164,15 @@ public class BlackoutArrayListTest {
     }
 
     @Test
+    public void should_return_the_last_index_of_the_given_input_when_it_is_in_the_middle_of_the_list() throws Exception {
+        BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{10, 2, 3, 10});
+
+        int lastIndex = blackoutIntegerArray.lastIndexOf(3);
+
+        assertThat(lastIndex).isEqualTo(2);
+    }
+
+    @Test
     public void should_return_minus_one_if_the_given_input_is_not_in_the_list() throws Exception {
         BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{10, 2, 3, 10});
 
