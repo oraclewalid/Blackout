@@ -184,6 +184,17 @@ public class BlackoutArrayListTest {
     }
 
     @Test
+    public void should_remove_only_existing_elements_from_the_list() throws Exception {
+        BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{1, 2, 3, 11});
+
+        boolean removed = blackoutIntegerArray.removeAll(Arrays.asList(2, 4, 11, 22));
+
+        assertThat(removed).isTrue();
+        assertThat(blackoutIntegerArray).hasSize(2);
+        assertThat(blackoutIntegerArray).containsExactly(1, 3);
+    }
+
+    @Test
     public void should_return_false_when_given_element_are_not_in_list() throws Exception {
         BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{1, 2, 3, 11});
 
