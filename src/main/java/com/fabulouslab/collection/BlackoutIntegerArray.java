@@ -156,11 +156,14 @@ public class BlackoutIntegerArray implements List<Integer>{
             }
         }
         if (newIndex != size) {
+            long oldAddress = address;
             elementData = Arrays.copyOf(elementData, newIndex);
             BlackoutIntegerArray newArray = new BlackoutIntegerArray(elementData);
             size = newArray.size;
             address = newArray.address;
             capacity = newArray.capacity;
+
+            Memory.free(oldAddress);
             return true;
         }
 
