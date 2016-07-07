@@ -176,7 +176,7 @@ public class BlackoutArrayListTest {
     }
 
     @Test
-    public void should_add_collection() throws Exception {
+    public void should_add_collection_in_the_end() throws Exception {
 
         BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
         List<Integer> listToAdd = new ArrayList(){{
@@ -184,6 +184,40 @@ public class BlackoutArrayListTest {
             add(2);
         }};
         blackoutArrayList.addAll(listToAdd);
+
+        assertThat(blackoutArrayList.size()).isEqualTo(4);
+        assertThat(blackoutArrayList.get(0)).isEqualTo(10);
+        assertThat(blackoutArrayList.get(1)).isEqualTo(-1);
+        assertThat(blackoutArrayList.get(2)).isEqualTo(1);
+        assertThat(blackoutArrayList.get(3)).isEqualTo(2);
+    }
+
+    @Test
+    public void should_add_collection_in_middle() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        List<Integer> listToAdd = new ArrayList(){{
+            add(1);
+            add(2);
+        }};
+        blackoutArrayList.addAll(1, listToAdd);
+
+        assertThat(blackoutArrayList.size()).isEqualTo(4);
+        assertThat(blackoutArrayList.get(0)).isEqualTo(10);
+        assertThat(blackoutArrayList.get(1)).isEqualTo(1);
+        assertThat(blackoutArrayList.get(2)).isEqualTo(2);
+        assertThat(blackoutArrayList.get(3)).isEqualTo(-1);
+    }
+
+    @Test
+    public void should_add_collection_in_the_end_with_index() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        List<Integer> listToAdd = new ArrayList(){{
+            add(1);
+            add(2);
+        }};
+        blackoutArrayList.addAll(2, listToAdd);
 
         assertThat(blackoutArrayList.size()).isEqualTo(4);
         assertThat(blackoutArrayList.get(0)).isEqualTo(10);

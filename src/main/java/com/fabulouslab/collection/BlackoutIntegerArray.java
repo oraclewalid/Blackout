@@ -232,7 +232,7 @@ public class BlackoutIntegerArray implements List<Integer>{
     public boolean addAll(int index, Collection<? extends Integer> c) {
 
         try {
-            checkSizeBounds(index);
+            checkLimits(index);
             if(!checkCapacity(c.size())){
                 address = realocate(c.size(), index);
             }
@@ -254,7 +254,7 @@ public class BlackoutIntegerArray implements List<Integer>{
     public boolean addAll(Collection<? extends Integer> c) {
         try {
             if(!checkCapacity(c.size())){
-                address = realocate(c.size(), 0);
+                address = realocate(c.size());
             }
             int i = 0;
             for (int element : c) {
@@ -302,8 +302,21 @@ public class BlackoutIntegerArray implements List<Integer>{
         return newAddr;
     }
 
+    private long realocate(int newSize){
+
+        long newAddr = Memory.allocate((this.size + newSize) * INTEGER_LENGHT);
+        Memory.copyMemory(address, newAddr, this.size  * INTEGER_LENGHT);
+
+        return newAddr;
+    }
+
     private void checkSizeBounds(int index) {
         if (index >= size || index < 0)
+            throw new IndexOutOfBoundsException("index " + index + "is out of bound");
+    }
+
+    private void checkLimits(int index) {
+        if (index >= size + 1 || index < 0)
             throw new IndexOutOfBoundsException("index " + index + "is out of bound");
     }
 }
