@@ -226,4 +226,63 @@ public class BlackoutArrayListTest {
         assertThat(blackoutArrayList.get(3)).isEqualTo(2);
     }
 
+    @Test
+    public void should_add_element_in_the_end_with_index() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        blackoutArrayList.add(2, 3);
+
+        assertThat(blackoutArrayList.size()).isEqualTo(3);
+        assertThat(blackoutArrayList.get(0)).isEqualTo(10);
+        assertThat(blackoutArrayList.get(1)).isEqualTo(-1);
+        assertThat(blackoutArrayList.get(2)).isEqualTo(3);
+    }
+
+    @Test
+    public void should_add_element_in_the_middle_with_index() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        blackoutArrayList.add(1, 3);
+
+        assertThat(blackoutArrayList.size()).isEqualTo(3);
+        assertThat(blackoutArrayList.get(0)).isEqualTo(10);
+        assertThat(blackoutArrayList.get(1)).isEqualTo(3);
+        assertThat(blackoutArrayList.get(2)).isEqualTo(-1);
+    }
+
+    @Test
+    public void should_add_element_in_the_begin_with_index() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10, -1});
+        blackoutArrayList.add(0, 3);
+
+        assertThat(blackoutArrayList.size()).isEqualTo(3);
+        assertThat(blackoutArrayList.get(0)).isEqualTo(3);
+        assertThat(blackoutArrayList.get(1)).isEqualTo(10);
+        assertThat(blackoutArrayList.get(2)).isEqualTo(-1);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void should_get_IndexOutOfBoundsException_when_add_out_size() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        blackoutArrayList.add(3, 3);
+    }
+
+    @Test
+    public void should_add_element() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        blackoutArrayList.add(3);
+        blackoutArrayList.add(4);
+        blackoutArrayList.add(5);
+
+        assertThat(blackoutArrayList.size()).isEqualTo(5);
+        assertThat(blackoutArrayList.get(0)).isEqualTo(10);
+        assertThat(blackoutArrayList.get(1)).isEqualTo(-1);
+        assertThat(blackoutArrayList.get(2)).isEqualTo(3);
+        assertThat(blackoutArrayList.get(3)).isEqualTo(4);
+        assertThat(blackoutArrayList.get(4)).isEqualTo(5);
+    }
+
 }

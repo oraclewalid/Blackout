@@ -272,14 +272,25 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public void add(int index, Integer element) {
-        checkSizeBounds(index);
-
+        checkLimits(index);
+        if(!checkCapacity(1)){
+            address = realocate(1, index);
+        }
+        long addr = Memory.computeAddr(address, index, INTEGER_LENGHT);
+        Memory.putInt(addr,element);
+        size = size + 1;
     }
 
     @Override
-    public boolean add(Integer integer) {
+    public boolean add(Integer element) {
 
-        return false;
+        try {
+            add(size, element);
+            return true;
+        }
+        catch (BlackoutException ex){
+            return false;
+        }
     }
 
     private boolean checkCapacity(int newSize){
