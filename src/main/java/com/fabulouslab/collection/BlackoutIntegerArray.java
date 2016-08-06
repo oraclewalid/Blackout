@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
+import com.fabulouslab.exception.BlackoutException;
 import com.fabulouslab.util.Memory;
 
 public class BlackoutIntegerArray implements List<Integer>{
@@ -62,7 +63,7 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public Integer get(int index) {
-        checkBounds(index);
+        checkSizeBounds(index);
         long addr = address + index * INTEGER_LENGHT;
         return Memory.getInt(addr);
     }
@@ -194,7 +195,6 @@ public class BlackoutIntegerArray implements List<Integer>{
         Memory.free(address);
         size = 0;
         address = Memory.allocate(this.capacity * INTEGER_LENGHT);
-
     }
 
     @Override
@@ -239,11 +239,6 @@ public class BlackoutIntegerArray implements List<Integer>{
     }
 
     @Override
-    public void add(int index, Integer element) {
-
-    }
-
-    @Override
     public Integer set(int index, Integer element) {
         Integer oldValue = get(index);
         long addr = Memory.computeAddr(address, index, INTEGER_LENGHT);
@@ -253,21 +248,104 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public boolean addAll(int index, Collection<? extends Integer> c) {
-        return false;
+
+        try {
+            checkLimits(index);
+            if(!checkCapacity(c.size())){
+                address = realocate(c.size(), index);
+            }
+            int i = 0;
+            for (int element : c) {
+                long addr = Memory.computeAddr(address, index + i, INTEGER_LENGHT);
+                Memory.putInt(addr,element);
+                i++;
+            }
+            size = size + c.size();
+            return true;
+        }
+        catch (BlackoutException ex){
+            return false;
+        }
     }
 
     @Override
     public boolean addAll(Collection<? extends Integer> c) {
-        return false;
+        try {
+            if(!checkCapacity(c.size())){
+                address = realocate(c.size());
+            }
+            int i = 0;
+            for (int element : c) {
+                long addr = Memory.computeAddr(address, size + i, INTEGER_LENGHT);
+                Memory.putInt(addr,element);
+                i++;
+            }
+            size = size + c.size();
+            return true;
+        }
+        catch (BlackoutException ex){
+            return false;
+        }
     }
 
     @Override
-    public boolean add(Integer integer) {
-        return false;
+    public void add(int index, Integer element) {
+        checkLimits(index);
+        if(!checkCapacity(1)){
+            address = realocate(1, index);
+        }
+        long addr = Memory.computeAddr(address, index, INTEGER_LENGHT);
+        Memory.putInt(addr,element);
+        size = size + 1;
     }
 
-    private void checkBounds(int index) {
+    @Override
+    public boolean add(Integer element) {
+
+        try {
+            add(size, element);
+            return true;
+        }
+        catch (BlackoutException ex){
+            return false;
+        }
+    }
+
+    private boolean checkCapacity(int newSize){
+        if(capacity <= size + newSize){
+            return false;
+        }
+        return true;
+    }
+
+    private long realocate(int newSize, int padding){
+
+        long newAddr = Memory.allocate((this.size + newSize) * INTEGER_LENGHT);
+        //Copy first part before padding
+        Memory.copyMemory(address, newAddr, padding * INTEGER_LENGHT);
+        //Copy second part after padding
+        long oldAddrWithPadding = Memory.computeAddr(address, padding, INTEGER_LENGHT);
+        long newAddrWithPadding = Memory.computeAddr(newAddr, padding + newSize, INTEGER_LENGHT);
+        Memory.copyMemory(oldAddrWithPadding, newAddrWithPadding , (size - padding) * INTEGER_LENGHT);
+
+        return newAddr;
+    }
+
+    private long realocate(int newSize){
+
+        long newAddr = Memory.allocate((this.size + newSize) * INTEGER_LENGHT);
+        Memory.copyMemory(address, newAddr, this.size  * INTEGER_LENGHT);
+
+        return newAddr;
+    }
+
+    private void checkSizeBounds(int index) {
         if (index >= size || index < 0)
-            throw new IndexOutOfBoundsException("index" + index + "is out of bound");
+            throw new IndexOutOfBoundsException("index " + index + "is out of bound");
+    }
+
+    private void checkLimits(int index) {
+        if (index >= size + 1 || index < 0)
+            throw new IndexOutOfBoundsException("index " + index + "is out of bound");
     }
 }
