@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import com.fabulouslab.exception.BlackoutException;
 import com.fabulouslab.util.Memory;
@@ -208,6 +209,8 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     }
 
+    public void tri_by_merge()
+
     @Override
     public void replaceAll(UnaryOperator<Integer> operator) {
         Objects.nonNull(operator);
@@ -257,17 +260,17 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public Spliterator<Integer> spliterator() {
-        return null;
+        return Spliterators.spliterator(this, 0);
     }
 
     @Override
     public Stream<Integer> stream() {
-        return null;
+        return StreamSupport.stream(spliterator(), false);
     }
 
     @Override
     public Stream<Integer> parallelStream() {
-        return null;
+        return StreamSupport.stream(spliterator(), true);
     }
 
     @Override
