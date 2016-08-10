@@ -208,9 +208,7 @@ public class BlackoutIntegerArray implements List<Integer>{
     public void sort(Comparator<? super Integer> c) {
 
     }
-
-    public void tri_by_merge()
-
+    
     @Override
     public void replaceAll(UnaryOperator<Integer> operator) {
         Objects.nonNull(operator);
