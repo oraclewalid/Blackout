@@ -1,10 +1,12 @@
 package com.fabulouslab.collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import org.junit.Test;
 
@@ -213,7 +215,8 @@ public class BlackoutArrayListTest {
 
         assertThat(removed).isFalse();
     }
-  @Test
+
+    @Test
     public void should_add_collection_with_index() throws Exception {
 
         BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,1,3,-2});
@@ -343,4 +346,64 @@ public class BlackoutArrayListTest {
         assertThat(blackoutArrayList.get(4)).isEqualTo(5);
     }
 
+    @Test
+    public void should_replace_all_element() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2});
+
+        blackoutArrayList.replaceAll(x -> x*2);
+        assertThat(blackoutArrayList.size()).isEqualTo(3);
+        assertThat(blackoutArrayList.get(0)).isEqualTo(0);
+        assertThat(blackoutArrayList.get(1)).isEqualTo(2);
+        assertThat(blackoutArrayList.get(2)).isEqualTo(4);
+    }
+
+    @Test
+    public void should_get_sublist() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2,3,4,5});
+        List<Integer> subList = blackoutArrayList.subList(1, 4);
+        assertThat(subList.size()).isEqualTo(3);
+        assertThat(subList.get(0)).isEqualTo(1);
+        assertThat(subList.get(1)).isEqualTo(2);
+        assertThat(subList.get(2)).isEqualTo(3);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void should_get_sublist_check_rang_toIndex() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2,3,4,5});
+        List<Integer> subList = blackoutArrayList.subList(1, 7);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void should_get_sublist_check_rang_fromIndex_greater_than_toInddex() throws Exception {
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2,3,4,5});
+        List<Integer> subList = blackoutArrayList.subList(3, 2);
+    }
+
+    @Test
+    public void should_remove_paire_number() throws Exception{
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2,8,6,3,4,5});
+
+        blackoutArrayList.removeIf(x -> x%2 == 0 );
+        assertThat(blackoutArrayList.size()).isEqualTo(3);
+        assertThat(blackoutArrayList.get(0)).isEqualTo(1);
+        assertThat(blackoutArrayList.get(1)).isEqualTo(3);
+        assertThat(blackoutArrayList.get(2)).isEqualTo(5);
+    }
+
+    @Test
+    public void should_retain_a_collection() throws Exception{
+
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2,3,4,5});
+
+        blackoutArrayList.retainAll(Arrays.asList(1,2,5));
+        assertThat(blackoutArrayList.size()).isEqualTo(3);
+        assertThat(blackoutArrayList.get(0)).isEqualTo(1);
+        assertThat(blackoutArrayList.get(1)).isEqualTo(2);
+        assertThat(blackoutArrayList.get(2)).isEqualTo(5);
+    }
 }

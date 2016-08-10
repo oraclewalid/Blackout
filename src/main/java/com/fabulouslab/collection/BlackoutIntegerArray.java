@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import com.fabulouslab.exception.BlackoutException;
 import com.fabulouslab.util.Memory;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class BlackoutIntegerArray implements List<Integer>{
 
@@ -74,9 +75,9 @@ public class BlackoutIntegerArray implements List<Integer>{
         int oldValue = get(index);
         long oldValueAddress = Memory.computeAddr(address, index, INTEGER_LENGHT);
         long nextValueAddress = Memory.computeAddr(address, index+1, INTEGER_LENGHT);;
-        long lenght = (capacity - index - 1) * INTEGER_LENGHT;
+        long length = (capacity - index - 1) * INTEGER_LENGHT;
 
-        Memory.copyMemory(nextValueAddress, oldValueAddress, lenght);
+        Memory.copyMemory(nextValueAddress, oldValueAddress, length);
         size--;
         return oldValue;
     }
@@ -110,7 +111,10 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public void forEach(Consumer<? super Integer> action) {
-
+        Objects.nonNull(action);
+        for (int i = 0; i < size ; i++) {
+            action.accept(get(i));
+        }
     }
 
     @Override
@@ -126,7 +130,7 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return null;
+        throw new NotImplementedException();
     }
 
     @Override
@@ -172,12 +176,31 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public boolean removeIf(Predicate<? super Integer> filter) {
-        return false;
+
+        Objects.nonNull(filter);
+        boolean anyRemove = false;
+        for (int i = 0; i < size ; i++) {
+            if(filter.test(get(i))){
+                remove(i);
+                i--;
+                anyRemove = true;
+            }
+        }
+        return anyRemove;
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
-        return false;
+    public boolean retainAll(Collection<?> collection) {
+        Objects.nonNull(collection);
+        boolean anyRemove = false;
+        for (int i = 0; i < size ; i++) {
+            if(!collection.contains(get(i))){
+                remove(i);
+                i--;
+                anyRemove = true;
+            }
+        }
+        return anyRemove;
     }
 
     @Override
@@ -187,7 +210,10 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public void replaceAll(UnaryOperator<Integer> operator) {
-
+        Objects.nonNull(operator);
+        for (int i = 0; i < size ; i++) {
+            set(i, operator.apply(get(i)));
+        }
     }
 
     @Override
@@ -220,7 +246,13 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public List<Integer> subList(int fromIndex, int toIndex) {
-        return null;
+
+        checkRang(fromIndex, toIndex);
+        List<Integer> subList = new ArrayList(toIndex - fromIndex);
+        for (int i = fromIndex; i < toIndex; i++ ){
+            subList.add(get(i));
+        }
+        return subList;
     }
 
     @Override
@@ -347,5 +379,12 @@ public class BlackoutIntegerArray implements List<Integer>{
     private void checkLimits(int index) {
         if (index >= size + 1 || index < 0)
             throw new IndexOutOfBoundsException("index " + index + "is out of bound");
+    }
+
+    private void checkRang(int fromIndex, int toIndex) {
+        checkSizeBounds(fromIndex);
+        checkLimits(toIndex);
+        if (fromIndex >= toIndex)
+            throw new IndexOutOfBoundsException("the " + fromIndex + "is greather than" + toIndex);
     }
 }
