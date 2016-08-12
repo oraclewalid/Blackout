@@ -17,12 +17,31 @@ public class Memory {
         }
     }
 
-    public static void  copyMemory(long oldValueAddress, long newValueAddress, long lenght){
+    public static void  copyMemory(long oldPositionAddress, long newPositionAddress, long length){
         try {
-            getUnsafe().copyMemory(oldValueAddress, newValueAddress, lenght);
+            getUnsafe().copyMemory(oldPositionAddress, newPositionAddress, length);
         } catch (IllegalAccessException | NoSuchFieldException e) {
             throw  new BlackoutException(e);
         }
+    }
+
+    public static void  swap(long firstAddress, long secondAddress, int lenght){
+        try {
+            long tmpAdress = getUnsafe().allocateMemory(lenght);
+            copyMemory(firstAddress, tmpAdress, lenght);
+            copyMemory(secondAddress, firstAddress, lenght);
+            copyMemory(tmpAdress, secondAddress, lenght);
+            free(tmpAdress);
+
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            throw  new BlackoutException(e);
+        }
+    }
+
+    public static void  swapIndex(long addr, int firstIndex, int secondIndex, int length){
+        long firstAddr = computeAddr(addr, firstIndex, length);
+        long secondAddr = computeAddr(addr, secondIndex, length);
+        swap(firstAddr, secondAddr, length);
     }
 
     public static void  free(long addr){
@@ -48,8 +67,8 @@ public class Memory {
         }
     }
 
-    public static long computeAddr(long addr, int index, int lenght){
-        return addr + index * lenght;
+    public static long computeAddr(long addr, int index, int length){
+        return addr + index * length;
     }
 
 }

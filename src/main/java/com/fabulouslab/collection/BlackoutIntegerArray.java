@@ -14,8 +14,6 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class BlackoutIntegerArray implements List<Integer>{
 
-    private static final int DEFAULT_CAPACITY = 10;
-
     private static final int INTEGER_LENGHT = 4;
 
     private long address;
@@ -205,10 +203,44 @@ public class BlackoutIntegerArray implements List<Integer>{
     }
 
     @Override
-    public void sort(Comparator<? super Integer> c) {
-
+    public void sort(Comparator<? super Integer> comparator) {
+        Objects.nonNull(comparator);
+        quicksort(comparator, 0, size() - 1);
     }
-    
+
+    /**
+     *
+     * from : https://fr.wikibooks.org/wiki/Impl%C3%A9mentation_d%27algorithmes_classiques/Algorithmes_de_tri/Tri_rapide
+     * @param comparator
+     * @param start
+     * @param end
+     */
+
+    private  void quicksort(Comparator<? super Integer> comparator, int start, int end) {
+        if (start < end) {
+            int pivotIndex = partition(comparator, start, end);
+            quicksort(comparator, start, pivotIndex - 1);
+            quicksort(comparator, pivotIndex + 1, end);
+        }
+    }
+
+    private int partition(Comparator<? super Integer> comparator, int start, int end) {
+        int pivotValue = this.get(start);
+        int d = start+1;
+        int f = end;
+        while (d < f) {
+            while(d < f && comparator.compare(this.get(f), pivotValue)  >= 0) f--;
+            while(d < f && comparator.compare(this.get(d), pivotValue) <= 0) d++;
+            Memory.swapIndex(this.address, f, d, 4);
+        }
+        if (this.get(d)> pivotValue) d--;
+        this.set(start, this.get(d));
+        this.set(d, pivotValue);
+        return d;
+    }
+
+
+
     @Override
     public void replaceAll(UnaryOperator<Integer> operator) {
         Objects.nonNull(operator);

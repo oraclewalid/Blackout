@@ -3,10 +3,10 @@ package com.fabulouslab.collection;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -406,4 +406,27 @@ public class BlackoutArrayListTest {
         assertThat(blackoutArrayList.get(1)).isEqualTo(2);
         assertThat(blackoutArrayList.get(2)).isEqualTo(5);
     }
+
+
+
+    @Test
+    public void sould_sort_elements() throws Exception{
+        int[] init = new int[]{0,1,2,2,8,6,3,4,5};
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(init);
+
+
+        blackoutArrayList.sort(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return Integer.compare(o1, o2);
+            }
+        });
+
+        Arrays.sort(init);
+        for (int i = 0; i < init.length; i++) {
+            assertThat(blackoutArrayList.get(i)).isEqualTo(init[i]);
+        }
+    }
+
+
 }
