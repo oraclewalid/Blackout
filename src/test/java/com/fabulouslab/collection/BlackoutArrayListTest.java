@@ -407,10 +407,8 @@ public class BlackoutArrayListTest {
         assertThat(blackoutArrayList.get(2)).isEqualTo(5);
     }
 
-
-
     @Test
-    public void sould_sort_elements() throws Exception{
+    public void sould_sort_elements() throws Exception {
         int[] init = new int[]{0,1,2,2,8,6,3,4,5};
         BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(init);
 
@@ -426,6 +424,41 @@ public class BlackoutArrayListTest {
         for (int i = 0; i < init.length; i++) {
             assertThat(blackoutArrayList.get(i)).isEqualTo(init[i]);
         }
+    }
+
+    @Test
+    public void should_iterate_on_blackout() throws Exception {
+        int[] init = new int[]{0,1,2};
+        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(init);
+
+
+        ListIterator<Integer> blackoutListIterator = blackoutArrayList.listIterator();
+
+
+        //hasNext and next
+        assertThat(blackoutListIterator.hasNext()).isEqualTo(true);
+        assertThat(blackoutListIterator.next()).isEqualTo(0);
+        assertThat(blackoutListIterator.hasNext()).isEqualTo(true);
+        assertThat(blackoutListIterator.next()).isEqualTo(1);
+        assertThat(blackoutListIterator.hasNext()).isEqualTo(true);
+        assertThat(blackoutListIterator.next()).isEqualTo(2);
+        assertThat(blackoutListIterator.hasNext()).isEqualTo(false);
+
+        // hasPrevious and previous
+        assertThat(blackoutListIterator.hasPrevious()).isEqualTo(true);
+        assertThat(blackoutListIterator.previous()).isEqualTo(1);
+
+        //remove
+        blackoutListIterator.remove();
+        assertThat(blackoutListIterator.hasPrevious()).isEqualTo(false);
+        assertThat(blackoutListIterator.next()).isEqualTo(2);
+
+        blackoutListIterator.add(3);
+        assertThat(blackoutListIterator.hasNext()).isEqualTo(true);
+        assertThat(blackoutListIterator.next()).isEqualTo(3);
+
+
+
     }
 
 

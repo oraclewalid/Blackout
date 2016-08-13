@@ -95,15 +95,15 @@ public class BlackoutIntegerArray implements List<Integer>{
     @Override
     public Iterator<Integer> iterator() {
         return new Iterator<Integer>() {
-            int counter = -1;
+            int cursor = -1;
             @Override
             public boolean hasNext() {
-                return counter + 1 < size;
+                return cursor + 1 < size;
             }
 
             @Override
             public Integer next() {
-                return get(++counter);
+                return get(++cursor);
             }
         };
     }
@@ -269,12 +269,12 @@ public class BlackoutIntegerArray implements List<Integer>{
 
     @Override
     public ListIterator<Integer> listIterator() {
-        return null;
+        return new BlackoutIterator();
     }
 
     @Override
     public ListIterator<Integer> listIterator(int index) {
-        return null;
+        return new BlackoutIterator(index);
     }
 
     @Override
@@ -419,5 +419,64 @@ public class BlackoutIntegerArray implements List<Integer>{
         checkLimits(toIndex);
         if (fromIndex >= toIndex)
             throw new IndexOutOfBoundsException("the " + fromIndex + "is greather than" + toIndex);
+    }
+
+    private class BlackoutIterator implements ListIterator<Integer>{
+
+        private int cursor = -1;
+
+
+        public BlackoutIterator() {
+        }
+
+        public BlackoutIterator(int cursor) {
+            this.cursor = cursor;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor + 1 < size();
+        }
+
+        @Override
+        public Integer next() {
+            return get(++cursor);
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return cursor > 0;
+        }
+
+        @Override
+        public Integer previous() {
+            return get(--cursor);
+        }
+
+        @Override
+        public int nextIndex() {
+            return ++cursor;
+        }
+
+        @Override
+        public int previousIndex() {
+            return --cursor;
+        }
+
+        @Override
+        public void remove() {
+            BlackoutIntegerArray.this.remove(cursor);
+            cursor--;
+        }
+
+        @Override
+        public void set(Integer value) {
+            BlackoutIntegerArray.this.set(cursor, value);
+        }
+
+        @Override
+        public void add(Integer value) {
+            BlackoutIntegerArray.this.add(cursor + 1, value);
+        }
     }
 }
