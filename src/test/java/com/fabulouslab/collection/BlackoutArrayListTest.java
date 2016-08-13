@@ -434,6 +434,8 @@ public class BlackoutArrayListTest {
 
         ListIterator<Integer> blackoutListIterator = blackoutArrayList.listIterator();
 
+
+        //hasNext and next
         assertThat(blackoutListIterator.hasNext()).isEqualTo(true);
         assertThat(blackoutListIterator.next()).isEqualTo(0);
         assertThat(blackoutListIterator.hasNext()).isEqualTo(true);
@@ -441,13 +443,19 @@ public class BlackoutArrayListTest {
         assertThat(blackoutListIterator.hasNext()).isEqualTo(true);
         assertThat(blackoutListIterator.next()).isEqualTo(2);
         assertThat(blackoutListIterator.hasNext()).isEqualTo(false);
-        assertThat(blackoutListIterator.hasPrevious()).isEqualTo(true);
 
+        // hasPrevious and previous
+        assertThat(blackoutListIterator.hasPrevious()).isEqualTo(true);
+        assertThat(blackoutListIterator.previous()).isEqualTo(1);
+
+        //remove
         blackoutListIterator.remove();
-        assertThat(blackoutListIterator.next()).isEqualTo(1);
+        assertThat(blackoutListIterator.hasPrevious()).isEqualTo(false);
+        assertThat(blackoutListIterator.next()).isEqualTo(2);
 
         blackoutListIterator.add(3);
         assertThat(blackoutListIterator.hasNext()).isEqualTo(true);
+        assertThat(blackoutListIterator.next()).isEqualTo(3);
 
 
 

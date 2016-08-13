@@ -421,7 +421,7 @@ public class BlackoutIntegerArray implements List<Integer>{
             throw new IndexOutOfBoundsException("the " + fromIndex + "is greather than" + toIndex);
     }
 
-    class BlackoutIterator implements ListIterator<Integer>{
+    private class BlackoutIterator implements ListIterator<Integer>{
 
         private int cursor = -1;
 
@@ -476,7 +476,7 @@ public class BlackoutIntegerArray implements List<Integer>{
 
         @Override
         public void add(Integer value) {
-            BlackoutIntegerArray.this.add(cursor, value);
+            BlackoutIntegerArray.this.add(cursor + 1, value);
         }
     }
 }
