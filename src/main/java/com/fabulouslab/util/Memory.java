@@ -67,6 +67,22 @@ public class Memory {
         }
     }
 
+    public static void  putFloat(long addr, float value){
+        try {
+            getUnsafe().putFloat(addr ,value);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            throw  new BlackoutException(e);
+        }
+    }
+
+    public static float getFloat(long addr){
+        try {
+            return getUnsafe().getFloat(addr);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            throw  new BlackoutException(e);
+        }
+    }
+
     public static long computeAddr(long addr, int index, int length){
         return addr + index * length;
     }
