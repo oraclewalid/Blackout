@@ -1,21 +1,17 @@
 package com.fabulouslab.collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.within;
 
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-public class BlackoutArrayListTest {
+public class BlackoutIntegerListTest {
 
     @Test
     public void should_get_3_as_size() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{1,2,3});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{1,2,3});
 
         assertThat(blackoutArrayList.size()).isEqualTo(3);
         assertThat(blackoutArrayList.isEmpty()).isFalse();
@@ -27,7 +23,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_get_zero_for_empty_array() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{});
         assertThat(blackoutArrayList.size()).isEqualTo(0);
         assertThat(blackoutArrayList.isEmpty()).isTrue();
     }
@@ -35,14 +31,14 @@ public class BlackoutArrayListTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void should_check_out_of_bound() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{1});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{1});
         blackoutArrayList.get(1);
     }
 
     @Test
     public void should_remove_a_value_by_index() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{1,7,10});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{1,7,10});
         Integer removedValue = blackoutArrayList.remove(1);
 
         assertThat(blackoutArrayList.size()).isEqualTo(2);
@@ -54,7 +50,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_last_element_by_index() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{1,7,10});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{1,7,10});
         Integer removedValue = blackoutArrayList.remove(2);
 
         assertThat(blackoutArrayList.size()).isEqualTo(2);
@@ -66,7 +62,7 @@ public class BlackoutArrayListTest {
     @Test(expected = NullPointerException.class)
     public void should_get_first_index_of_a_number() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{1,7,10});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{1,7,10});
 
         assertThat(blackoutArrayList.indexOf(1)).isEqualTo(0);
         assertThat(blackoutArrayList.indexOf(7)).isEqualTo(1);
@@ -78,7 +74,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_get_a_iterrator() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2,3});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{0,1,2,3});
 
         for (Integer i : blackoutArrayList){
            assertThat(i).isEqualTo(blackoutArrayList.get(i));
@@ -88,7 +84,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_get_a_array_in_heap_of_off_heap_array() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,0,3});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10,-1,0,3});
         Object[] onHeapArray = blackoutArrayList.toArray();
 
         assertThat(onHeapArray.length).isEqualTo(4);
@@ -101,7 +97,7 @@ public class BlackoutArrayListTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void should_get_a_empty_array_in_heap_of_emplty_off_heap_array() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{});
         Object[] onHeapArray = blackoutArrayList.toArray();
 
         assertThat(onHeapArray.length).isEqualTo(0);
@@ -111,7 +107,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_remove_object() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,0,3});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10,-1,0,3});
         boolean remove = blackoutArrayList.remove(new Integer(10));
 
         assertThat(remove).isTrue();
@@ -124,7 +120,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_not_remove_a_not_found_object() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10, -1, 0, 3});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10, -1, 0, 3});
         boolean remove = blackoutArrayList.remove(new Integer(2));
 
         assertThat(remove).isFalse();
@@ -134,14 +130,14 @@ public class BlackoutArrayListTest {
     @Test(expected = NullPointerException.class)
     public void should_throw_exception_if_object_is_null() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,0,3});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10,-1,0,3});
         boolean remove = blackoutArrayList.remove(null);
     }
 
     @Test
     public void should_set_new_value() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,0,3});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10,-1,0,3});
         int  oldValue = blackoutArrayList.set(2,2);
 
         assertThat(oldValue).isEqualTo(0);
@@ -151,7 +147,7 @@ public class BlackoutArrayListTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void should_clear_list() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,0,3});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10,-1,0,3});
         blackoutArrayList.clear();
 
         assertThat(blackoutArrayList.size()).isEqualTo(0);
@@ -160,7 +156,7 @@ public class BlackoutArrayListTest {
 
     @Test
     public void should_return_the_last_index_of_the_given_input() throws Exception {
-        BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{10, 2, 3, 10});
+        BlackoutIntegerList blackoutIntegerArray = new BlackoutIntegerList(new int[]{10, 2, 3, 10});
 
         int lastIndex = blackoutIntegerArray.lastIndexOf(10);
 
@@ -169,7 +165,7 @@ public class BlackoutArrayListTest {
 
     @Test
     public void should_return_the_last_index_of_the_given_input_when_it_is_in_the_middle_of_the_list() throws Exception {
-        BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{10, 2, 3, 10});
+        BlackoutIntegerList blackoutIntegerArray = new BlackoutIntegerList(new int[]{10, 2, 3, 10});
 
         int lastIndex = blackoutIntegerArray.lastIndexOf(3);
 
@@ -178,7 +174,7 @@ public class BlackoutArrayListTest {
 
     @Test
     public void should_return_minus_one_if_the_given_input_is_not_in_the_list() throws Exception {
-        BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{10, 2, 3, 10});
+        BlackoutIntegerList blackoutIntegerArray = new BlackoutIntegerList(new int[]{10, 2, 3, 10});
 
         int lastIndex = blackoutIntegerArray.lastIndexOf(1);
 
@@ -187,7 +183,7 @@ public class BlackoutArrayListTest {
 
     @Test
     public void should_remove_all_given_element_from_the_list() throws Exception {
-        BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{1, 2, 3, 11});
+        BlackoutIntegerList blackoutIntegerArray = new BlackoutIntegerList(new int[]{1, 2, 3, 11});
 
         boolean removed = blackoutIntegerArray.removeAll(Arrays.asList(2, 3));
 
@@ -198,7 +194,7 @@ public class BlackoutArrayListTest {
 
     @Test
     public void should_remove_only_existing_elements_from_the_list() throws Exception {
-        BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{1, 2, 3, 11});
+        BlackoutIntegerList blackoutIntegerArray = new BlackoutIntegerList(new int[]{1, 2, 3, 11});
 
         boolean removed = blackoutIntegerArray.removeAll(Arrays.asList(2, 4, 11, 22));
 
@@ -209,7 +205,7 @@ public class BlackoutArrayListTest {
 
     @Test
     public void should_return_false_when_given_element_are_not_in_list() throws Exception {
-        BlackoutIntegerArray blackoutIntegerArray = new BlackoutIntegerArray(new int[]{1, 2, 3, 11});
+        BlackoutIntegerList blackoutIntegerArray = new BlackoutIntegerList(new int[]{1, 2, 3, 11});
 
         boolean removed = blackoutIntegerArray.removeAll(Arrays.asList(22, 20));
 
@@ -219,7 +215,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_add_collection_with_index() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1,1,3,-2});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10,-1,1,3,-2});
         List<Integer> listToAdd = new ArrayList(){{
             add(1);
             add(2);
@@ -239,7 +235,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_add_collection_in_the_end() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10,-1});
         List<Integer> listToAdd = new ArrayList(){{
             add(1);
             add(2);
@@ -256,7 +252,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_add_collection_in_middle() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10,-1});
         List<Integer> listToAdd = new ArrayList(){{
             add(1);
             add(2);
@@ -273,7 +269,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_add_collection_in_the_end_with_index() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10,-1});
         List<Integer> listToAdd = new ArrayList(){{
             add(1);
             add(2);
@@ -290,7 +286,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_add_element_in_the_end_with_index() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10,-1});
         blackoutArrayList.add(2, 3);
 
         assertThat(blackoutArrayList.size()).isEqualTo(3);
@@ -302,7 +298,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_add_element_in_the_middle_with_index() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10,-1});
         blackoutArrayList.add(1, 3);
 
         assertThat(blackoutArrayList.size()).isEqualTo(3);
@@ -314,7 +310,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_add_element_in_the_begin_with_index() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10, -1});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10, -1});
         blackoutArrayList.add(0, 3);
 
         assertThat(blackoutArrayList.size()).isEqualTo(3);
@@ -326,14 +322,14 @@ public class BlackoutArrayListTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void should_get_IndexOutOfBoundsException_when_add_out_size() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10,-1});
         blackoutArrayList.add(3, 3);
     }
 
     @Test
     public void should_add_element() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{10,-1});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{10,-1});
         blackoutArrayList.add(3);
         blackoutArrayList.add(4);
         blackoutArrayList.add(5);
@@ -349,7 +345,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_replace_all_element() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{0,1,2});
 
         blackoutArrayList.replaceAll(x -> x*2);
         assertThat(blackoutArrayList.size()).isEqualTo(3);
@@ -361,7 +357,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_get_sublist() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2,3,4,5});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{0,1,2,3,4,5});
         List<Integer> subList = blackoutArrayList.subList(1, 4);
         assertThat(subList.size()).isEqualTo(3);
         assertThat(subList.get(0)).isEqualTo(1);
@@ -372,21 +368,21 @@ public class BlackoutArrayListTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void should_get_sublist_check_rang_toIndex() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2,3,4,5});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{0,1,2,3,4,5});
         List<Integer> subList = blackoutArrayList.subList(1, 7);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void should_get_sublist_check_rang_fromIndex_greater_than_toInddex() throws Exception {
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2,3,4,5});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{0,1,2,3,4,5});
         List<Integer> subList = blackoutArrayList.subList(3, 2);
     }
 
     @Test
     public void should_remove_paire_number() throws Exception{
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2,8,6,3,4,5});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{0,1,2,8,6,3,4,5});
 
         blackoutArrayList.removeIf(x -> x%2 == 0 );
         assertThat(blackoutArrayList.size()).isEqualTo(3);
@@ -398,7 +394,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_retain_a_collection() throws Exception{
 
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(new int[]{0,1,2,3,4,5});
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(new int[]{0,1,2,3,4,5});
 
         blackoutArrayList.retainAll(Arrays.asList(1,2,5));
         assertThat(blackoutArrayList.size()).isEqualTo(3);
@@ -410,7 +406,7 @@ public class BlackoutArrayListTest {
     @Test
     public void sould_sort_elements() throws Exception {
         int[] init = new int[]{0,1,2,2,8,6,3,4,5};
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(init);
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(init);
 
 
         blackoutArrayList.sort(new Comparator<Integer>() {
@@ -429,7 +425,7 @@ public class BlackoutArrayListTest {
     @Test
     public void should_iterate_on_blackout() throws Exception {
         int[] init = new int[]{0,1,2};
-        BlackoutIntegerArray blackoutArrayList = new BlackoutIntegerArray(init);
+        BlackoutIntegerList blackoutArrayList = new BlackoutIntegerList(init);
 
 
         ListIterator<Integer> blackoutListIterator = blackoutArrayList.listIterator();
