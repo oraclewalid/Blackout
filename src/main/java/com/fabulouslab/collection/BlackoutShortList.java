@@ -86,7 +86,7 @@ public class BlackoutShortList extends BlackoutAbstractList<Short>{
         try {
             checkLimits(index);
             if(!checkCapacity(c.size())){
-                address = realocate(c.size(), index);
+                address = reallocate(c.size(), index);
             }
             int i = 0;
             for (short element : c) {
@@ -106,7 +106,7 @@ public class BlackoutShortList extends BlackoutAbstractList<Short>{
     public boolean addAll(Collection<? extends Short> c) {
         try {
             if(!checkCapacity(c.size())){
-                address = realocate(c.size());
+                address = reallocate(c.size());
             }
             int i = 0;
             for (short element : c) {
@@ -126,7 +126,7 @@ public class BlackoutShortList extends BlackoutAbstractList<Short>{
     public void add(int index, Short element) {
         checkLimits(index);
         if(!checkCapacity(1)){
-            address = realocate(1, index);
+            address = reallocate(1, index);
         }
         long addr = Memory.computeAddr(address, index, getLength());
         Memory.putInt(addr,element);

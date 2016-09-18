@@ -260,7 +260,7 @@ public abstract class BlackoutAbstractList<E> implements List<E> {
         return true;
     }
 
-    protected long realocate(int newSize, int padding){
+    protected long reallocate(int newSize, int padding){
 
         long newAddr = Memory.allocate((this.size + newSize) * getLength());
         //Copy first part before padding
@@ -273,7 +273,7 @@ public abstract class BlackoutAbstractList<E> implements List<E> {
         return newAddr;
     }
 
-    protected long realocate(int newSize){
+    protected long reallocate(int newSize){
 
         long newAddr = Memory.allocate((this.size + newSize) * getLength());
         Memory.copyMemory(address, newAddr, this.size  * getLength());

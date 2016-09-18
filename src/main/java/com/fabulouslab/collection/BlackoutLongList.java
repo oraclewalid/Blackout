@@ -85,7 +85,7 @@ public class BlackoutLongList extends BlackoutAbstractList<Long>{
         try {
             checkLimits(index);
             if(!checkCapacity(c.size())){
-                address = realocate(c.size(), index);
+                address = reallocate(c.size(), index);
             }
             int i = 0;
             for (Long element : c) {
@@ -105,7 +105,7 @@ public class BlackoutLongList extends BlackoutAbstractList<Long>{
     public boolean addAll(Collection<? extends Long> c) {
         try {
             if(!checkCapacity(c.size())){
-                address = realocate(c.size());
+                address = reallocate(c.size());
             }
             int i = 0;
             for (long element : c) {
@@ -125,7 +125,7 @@ public class BlackoutLongList extends BlackoutAbstractList<Long>{
     public void add(int index, Long element) {
         checkLimits(index);
         if(!checkCapacity(1)){
-            address = realocate(1, index);
+            address = reallocate(1, index);
         }
         long addr = Memory.computeAddr(address, index, getLength());
         Memory.putLong(addr,element);

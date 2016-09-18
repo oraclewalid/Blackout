@@ -86,7 +86,7 @@ public class BlackoutFloatList extends BlackoutAbstractList<Float>{
         try {
             checkLimits(index);
             if(!checkCapacity(c.size())){
-                address = realocate(c.size(), index);
+                address = reallocate(c.size(), index);
             }
             int i = 0;
             for (Float element : c) {
@@ -106,7 +106,7 @@ public class BlackoutFloatList extends BlackoutAbstractList<Float>{
     public boolean addAll(Collection<? extends Float> c) {
         try {
             if(!checkCapacity(c.size())){
-                address = realocate(c.size());
+                address = reallocate(c.size());
             }
             int i = 0;
             for (Float element : c) {
@@ -126,7 +126,7 @@ public class BlackoutFloatList extends BlackoutAbstractList<Float>{
     public void add(int index, Float element) {
         checkLimits(index);
         if(!checkCapacity(1)){
-            address = realocate(1, index);
+            address = reallocate(1, index);
         }
         long addr = Memory.computeAddr(address, index, getLength());
         Memory.putFloat(addr,element);
